@@ -18,7 +18,7 @@ namespace ChangelogGen
             string repoPath = args[0];
 
             // Check if HTML generation is requested
-            bool generateHtml = args.Length > 1 && args[1].ToLower() == "y";
+            bool generateHtml = args.Length > 1 && args[1].ToLower() == "html";
 
             // Validate if path is a git repository using LibGit2Sharp
             if (!Repository.IsValid(repoPath))
