@@ -21,12 +21,7 @@ dotnet run [repository-path] [html-option]
 
 ## Examples
 
-Generate changelog for the current directory:
-```
-dotnet run
-```
-
-Generate changelog for a specific repository:
+Generate changelog for repository:
 ```
 dotnet run C:\path\to\repository
 ```
