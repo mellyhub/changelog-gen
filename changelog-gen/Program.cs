@@ -1,5 +1,9 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using LibGit2Sharp;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ChangelogGen
 {
@@ -13,6 +17,9 @@ namespace ChangelogGen
             // Get repository path from argument
             string repoPath = args[0];
 
+            // Check if HTML generation is requested
+            bool generateHtml = args.Length > 1 && args[1].ToLower() == "y";
+
             // Validate if path is a git repository using LibGit2Sharp
             if (!Repository.IsValid(repoPath))
             {
@@ -21,11 +28,20 @@ namespace ChangelogGen
             }
 
             string changelog = GenerateChangelog(repoPath);
-            Console.WriteLine(changelog);
 
-            string outputPath = Path.Combine(repoPath, "changelog.md"); // Hardcoded output path for now
-            File.WriteAllText(outputPath, changelog);
-            Console.WriteLine($"Changelog generated and saved to {outputPath}");
+            // Save Markdown changelog
+            string mdOutputPath = Path.Combine(repoPath, "changelog.md");
+            File.WriteAllText(mdOutputPath, changelog);
+            Console.WriteLine($"Changelog generated and saved to {mdOutputPath}");
+
+            // Generate HTML file if requested
+            if (generateHtml)
+            {
+                string htmlChangelog = ConvertToHtml(changelog);
+                string htmlOutputPath = Path.Combine(repoPath, "changelog.html");
+                File.WriteAllText(htmlOutputPath, htmlChangelog);
+                Console.WriteLine($"HTML version saved to {htmlOutputPath}");
+            }
         }
 
         static string GenerateChangelog(string repoPath)
@@ -36,6 +52,7 @@ namespace ChangelogGen
             using (var repo = new Repository(repoPath))
             {
                 var commits = repo.Commits.ToList();
+                
                 Dictionary<DateTime, List<Commit>> commitsByDate = new Dictionary<DateTime, List<Commit>>();
                 
                 // Group commits by date
@@ -53,6 +70,7 @@ namespace ChangelogGen
                 
                 // Sort dates (newest first)
                 var sortedDates = commitsByDate.Keys.OrderByDescending(date => date).ToList();
+                
                 foreach (var date in sortedDates)
                 {
                     changelog.AppendLine($"## {date.ToString("yyyy-MM-dd")}");
@@ -72,6 +90,87 @@ namespace ChangelogGen
             }
             
             return changelog.ToString();
+        }
+
+        static string ConvertToHtml(string markdownChangelog)
+        {
+            StringBuilder html = new StringBuilder();
+        
+            html.AppendLine("<!DOCTYPE html>");
+            html.AppendLine("<html lang=\"en\">");
+            html.AppendLine("<head>");
+            html.AppendLine("    <meta charset=\"UTF-8\">");
+            html.AppendLine("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+            html.AppendLine("    <title>Changelog</title>");
+            html.AppendLine("    <style>");
+            html.AppendLine("        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }");
+            html.AppendLine("        h1 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }");
+            html.AppendLine("        h2 { color: #444; margin-top: 20px; }");
+            html.AppendLine("        ul { padding-left: 20px; }");
+            html.AppendLine("        li { margin-bottom: 8px; }");
+            html.AppendLine("    </style>");
+            html.AppendLine("</head>");
+            html.AppendLine("<body>");
+            
+            // Convert markdown to simple HTML
+            string[] lines = markdownChangelog.Split('\n');
+            bool inList = false;
+            
+            foreach (string line in lines)
+            {
+                string trimmedLine = line.Trim();
+                
+                if (trimmedLine.StartsWith("# "))
+                {
+                    // Main heading
+                    if (inList)
+                    {
+                        html.AppendLine("</ul>");
+                        inList = false;
+                    }
+                    html.AppendLine($"<h1>{trimmedLine.Substring(2)}</h1>");
+                }
+                else if (trimmedLine.StartsWith("## "))
+                {
+                    // Subhead
+                    if (inList)
+                    {
+                        html.AppendLine("</ul>");
+                        inList = false;
+                    }
+                    html.AppendLine($"<h2>{trimmedLine.Substring(3)}</h2>");
+                }
+                else if (trimmedLine.StartsWith("- "))
+                {
+                    // List item
+                    if (!inList)
+                    {
+                        html.AppendLine("<ul>");
+                        inList = true;
+                    }
+                    html.AppendLine($"<li>{trimmedLine.Substring(2)}</li>");
+                }
+                else if (string.IsNullOrWhiteSpace(trimmedLine))
+                {
+                    // Empty line
+                    if (inList)
+                    {
+                        html.AppendLine("</ul>");
+                        inList = false;
+                    }
+                }
+            }
+            
+            // Ensure we close any open list
+            if (inList)
+            {
+                html.AppendLine("</ul>");
+            }
+            
+            html.AppendLine("</body>");
+            html.AppendLine("</html>");
+            
+            return html.ToString();
         }
     }
 }

@@ -8,14 +8,16 @@ A simple command-line application to generate changelogs from Git repositories u
 - Groups commits by date
 - Includes commit message, author, and short hash
 - Saves the output to a changelog.md file
+- Can generate an HTML version of the changelog
 
 ## Usage
 
 ```
-dotnet run [repository-path]
+dotnet run [repository-path] [html-option]
 ```
 
 - `repository-path`: Path to the Git repository
+- `html-option`: (Optional) Enter yes to generate an HTML version of the changelog
 
 ## Examples
 
