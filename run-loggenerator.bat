@@ -9,7 +9,8 @@ echo.
 echo Running changelog generator...
 echo.
 
-"C:\Users\melbi\Documents\GitHub\changelog-gen\changelog-gen\bin\Release\net8.0\win-x64\publish\changelog-gen.exe" "%REPO_PATH%"
+:: Use relative path instead of hardcoded absolute path
+%~dp0changelog-gen\bin\Release\net8.0\win-x64\publish\changelog-gen.exe "%REPO_PATH%"
 
 echo.
 echo Would you like to generate static html from the changelog? (y/n)
@@ -18,7 +19,7 @@ set /p GENERATE_HTML=
 if "%GENERATE_HTML%"=="y" (
     echo.
     echo Generating HTML version...
-    "C:\Users\melbi\Documents\GitHub\changelog-gen\changelog-gen\bin\Release\net8.0\win-x64\publish\changelog-gen.exe" "%REPO_PATH%" html
+    %~dp0changelog-gen\bin\Release\net8.0\win-x64\publish\changelog-gen.exe "%REPO_PATH%" html
     echo HTML changelog generated successfully.
 )
 
