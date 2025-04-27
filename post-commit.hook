@@ -7,7 +7,14 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # Path to the changelog generator
 CHANGELOG_GEN_PATH="$(dirname "$0")/../../changelog-gen/bin/Release/net8.0/win-x64/publish/changelog-gen.exe"
 
-# Run the changelog generator
-"$CHANGELOG_GEN_PATH" "$REPO_ROOT"
+# Run the changelog generator but don't block commit if it fails
+if [ -f "$CHANGELOG_GEN_PATH" ]; then
+    "$CHANGELOG_GEN_PATH" "$REPO_ROOT" || echo "Warning: Changelog generation failed, but commit was successful."
+    echo "Changelog updated automatically after commit."
+else
+    echo "Warning: Changelog generator not found at $CHANGELOG_GEN_PATH"
+    echo "Commit was successful, but changelog was not updated."
+fi
 
-echo "Changelog updated automatically after commit." 
+# Always exit with success to not block the commit
+exit 0 

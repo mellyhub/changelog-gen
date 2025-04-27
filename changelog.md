@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2025-04-27
+- Add changelog file to document recent changes and updates (mellyhub, 9c97675)
 - Implemented git hooks to automate change log creation (mellyhub, a60de6d)
 
 ## 2025-04-26
