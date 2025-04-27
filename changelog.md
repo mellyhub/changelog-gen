@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2025-04-27
+- Update changelog to include recent enhancements to post-commit hooks for improved changelog generation (mellyhub, bc73eb7)
 - Enhance post-commit hooks to allow changelog generation failures without blocking commits (mellyhub, 8bba056)
 - Add changelog file to document recent changes and updates (mellyhub, 9c97675)
 - Implemented git hooks to automate change log creation (mellyhub, a60de6d)
