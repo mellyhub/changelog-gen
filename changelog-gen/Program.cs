@@ -12,7 +12,7 @@ namespace ChangelogGen
         static void Main(string[] args)
         {
             Console.WriteLine("Changelog Generator");
-            Console.WriteLine("-------------------");
+            Console.WriteLine("--------------------");
 
             // Get repository path from argument
             string repoPath = args[0];

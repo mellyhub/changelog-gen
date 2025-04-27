@@ -1,6 +1,6 @@
 @echo off
 echo Changelog Generator
-echo ------------------
+echo --------------------
 echo.
 echo 1. Generate changelog
 echo 2. Install git hooks
