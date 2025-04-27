@@ -1,0 +1,13 @@
+# Changelog
+
+## 2025-04-27
+- Implemented git hooks to automate change log creation (mellyhub, a60de6d)
+
+## 2025-04-26
+- bog (mellyhub, 52ec083)
+- Merge branch 'main' of https://github.com/mellyhub/changelog-gen (mellyhub, d95c1ea)
+- Refactor run-loggenerator.bat to use relative paths for changelog generator executable (mellyhub, d490231)
+- Update README.md (mellyhub, 2d3abc3)
+- HTML support added (mellyhub, 016e519)
+- firsty (mellyhub, aa154c3)
+
