@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2025-04-27
+- Break commit loop (mellyhub, 75da0f1)
+- Enhance post-commit hooks to skip changelog generation when only changelog files are modified, preventing recursive commits (mellyhub, f6fabe8)
 - Update changelog to include recent enhancements to post-commit hooks for improved changelog generation (mellyhub, bc73eb7)
 - Enhance post-commit hooks to allow changelog generation failures without blocking commits (mellyhub, 8bba056)
 - Add changelog file to document recent changes and updates (mellyhub, 9c97675)
