@@ -1,0 +1,13 @@
+#!/bin/sh
+# Post-commit hook to automatically generate changelog
+
+# Get the repository root directory
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+# Path to the changelog generator
+CHANGELOG_GEN_PATH="$(dirname "$0")/../../changelog-gen/bin/Release/net8.0/win-x64/publish/changelog-gen.exe"
+
+# Run the changelog generator
+"$CHANGELOG_GEN_PATH" "$REPO_ROOT"
+
+echo "Changelog updated automatically after commit." 
